@@ -1,0 +1,251 @@
+C51 COMPILER V9.00   F34X_UART0_INTERRUPT                                                  02/25/2013 10:36:58 PAGE 1   
+
+
+C51 COMPILER V9.00, COMPILATION OF MODULE F34X_UART0_INTERRUPT
+OBJECT MODULE PLACED IN F34x_UART0_Interrupt.OBJ
+COMPILER INVOKED BY: C:\Keil\C51\BIN\c51.exe F34x_UART0_Interrupt.c DB OE BR INCDIR(C:\SiLabs\MCU\Inc)
+
+line level    source
+
+   1          #include "compiler_defs.h"
+   2          #include "C8051F340_defs.h"
+   3          #include <communication2.h>
+   4          //-----------------------------------------------------------------------------
+   5          // Global CONSTANTS
+   6          //-----------------------------------------------------------------------------
+   7          
+   8          #define SYSCLK      12000000           // SYSCLK frequency in Hz
+   9          #define BAUDRATE        9600           // Baud rate of UART in bps
+  10          
+  11          
+  12          //-----------------------------------------------------------------------------
+  13          // Function PROTOTYPES
+  14          //-----------------------------------------------------------------------------
+  15          
+  16          void SYSCLK_Init (void);
+  17          void UART0_Init (void);
+  18          void PORT_Init (void);
+  19          void Timer2_Init (int);
+  20          
+  21          
+  22          void Delay(unsigned int DTime);
+  23          void AccessCPU0(ECpu1Command Command);
+  24          void Init_Device(void);
+  25          xdata TPacker Packer ;
+  26          unsigned char RxTimeOutCount=0; // UART 接收超時時間設定
+  27          unsigned char *Pointer_Packer = &Packer.UART_Mark;
+  28          bit     IsRxTimeOut =0; 
+  29          bit IsRxCommand=0;
+  30          sbit ss  = P1^2;
+  31          sbit Switch = P0^2;
+  32          sbit LED    = P0^3;
+  33          //====test
+  34          void Putchar(unsigned char cData);
+  35          
+  36          //-----------------------------------------------------------------------------
+  37          // Global Variables
+  38          //-----------------------------------------------------------------------------
+  39          
+  40          #define UART_BUFFERSIZE 80
+  41          unsigned char UART_Buffer[UART_BUFFERSIZE];
+  42          unsigned char UART_Buffer_Size = 0;
+  43          unsigned char UART_Input_First = 0;
+  44          unsigned char UART_Output_First = 0;
+  45          unsigned char TX_Ready =1;
+  46          static char Byte;
+  47          
+  48          //-----------------------------------------------------------------------------
+  49          // MAIN Routine
+  50          //-----------------------------------------------------------------------------
+  51          void Putchar(unsigned char cData)
+  52          {
+  53   1              unsigned int i=10000;
+  54   1              while( TX_Ready == 0) ;
+  55   1              TX_Ready = 0;
+C51 COMPILER V9.00   F34X_UART0_INTERRUPT                                                  02/25/2013 10:36:58 PAGE 2   
+
+  56   1              TI0 = 0;
+  57   1              SBUF0 = cData;
+  58   1              while(i--);     
+  59   1      }
+  60          void Init_Device(void)
+  61          {
+  62   1              PCA0MD &= ~0x40; 
+  63   1              PORT_Init();                        // Initialize Port I/O
+  64   1          SYSCLK_Init ();                     // Initialize Oscillator
+  65   1          UART0_Init();
+  66   1      }
+  67          void main (void)
+  68          {
+  69   1          int i=0;
+  70   1              Init_Device();
+  71   1              Packer.Cpu1.Thermometer = 10;
+  72   1              Packer.UART_Mark = UART_Mark;
+  73   1              ss = 1;
+  74   1              LED = 1;                                       // enable)
+  75   1          EA = 1;
+  76   1              while(1)
+  77   1              {
+  78   2              
+  79   2                      if(Switch == 0)
+  80   2                      {
+  81   3                              AccessCPU0(Cpu1Command_PackStart);
+  82   3                              LED = 1;
+  83   3                      }
+  84   2                      else
+  85   2                      {
+  86   3                              AccessCPU0(Cpu1Command_PackStop);
+  87   3                              
+  88   3                              LED = 0;
+  89   3                      }
+  90   2              
+  91   2              //Putchar(0X09);
+  92   2              }
+  93   1      }
+  94          
+  95          //-----------------------------------------------------------------------------
+  96          // Initialization Subroutines
+  97          //-----------------------------------------------------------------------------
+  98          
+  99          //-----------------------------------------------------------------------------
+ 100          // PORT_Init
+ 101          //-----------------------------------------------------------------------------
+ 102          //
+ 103          // Return Value : None
+ 104          // Parameters   : None
+ 105          //
+ 106          // Configure the Crossbar and GPIO ports.
+ 107          //
+ 108          // P0.4   digital   push-pull    UART TX
+ 109          // P0.5   digital   open-drain   UART RX
+ 110          //
+ 111          //-----------------------------------------------------------------------------
+ 112          
+ 113          void PORT_Init (void)
+ 114          {
+ 115   1         P0MDOUT |= 0x10;                    // Enable UTX as push-pull output
+ 116   1         XBR0     = 0x01;                    // Enable UART on P0.4(TX) and P0.5(RX)
+ 117   1         XBR1     = 0x40;                    // Enable crossbar and weak pull-ups
+C51 COMPILER V9.00   F34X_UART0_INTERRUPT                                                  02/25/2013 10:36:58 PAGE 3   
+
+ 118   1      }
+ 119          //-----------------------------------------------------------------------------
+ 120          
+ 121          void SYSCLK_Init (void)
+ 122          {
+ 123   1         OSCICN |= 0x03;                     // Configure internal oscillator for
+ 124   1                                             // its maximum frequency
+ 125   1         RSTSRC  = 0x04;                     // Enable missing clock detector
+ 126   1      }
+ 127          
+ 128          void UART0_Init (void)
+ 129          {
+ 130   1         SCON0 = 0x10;                       // SCON0: 8-bit variable bit rate
+ 131   1                                             //        level of STOP bit is ignored
+ 132   1                                             //        RX enabled
+ 133   1                                             //        ninth bits are zeros
+ 134   1                                             //        clear RI0 and TI0 bits
+ 135   1         if (SYSCLK/BAUDRATE/2/256 < 1) {
+ 136   2            TH1 = -(SYSCLK/BAUDRATE/2);
+ 137   2            CKCON &= ~0x0B;                  // T1M = 1; SCA1:0 = xx
+ 138   2            CKCON |=  0x08;
+ 139   2         } else if (SYSCLK/BAUDRATE/2/256 < 4) {
+ 140   2            TH1 = -(SYSCLK/BAUDRATE/2/4);
+ 141   2            CKCON &= ~0x0B;                  // T1M = 0; SCA1:0 = 01
+ 142   2            CKCON |=  0x01;
+ 143   2         } else if (SYSCLK/BAUDRATE/2/256 < 12) {
+ 144   2            TH1 = -(SYSCLK/BAUDRATE/2/12);
+ 145   2            CKCON &= ~0x0B;                  // T1M = 0; SCA1:0 = 00
+ 146   2         } else {
+ 147   2            TH1 = -(SYSCLK/BAUDRATE/2/48);
+ 148   2            CKCON &= ~0x0B;                  // T1M = 0; SCA1:0 = 10
+ 149   2            CKCON |=  0x02;
+ 150   2         }
+ 151   1      
+ 152   1         TL1 = TH1;                          // init Timer1
+ 153   1         TMOD &= ~0xf0;                      // TMOD: timer 1 in 8-bit autoreload
+ 154   1         TMOD |=  0x20;
+ 155   1         TR1 = 1;                            // START Timer1
+ 156   1         TX_Ready = 1;                       // Flag showing that UART can transmit
+ 157   1         IP |= 0x10;                         // Make UART high priority
+ 158   1         ES0 = 1;                            // Enable UART0 interrupts
+ 159   1      
+ 160   1      }
+ 161          //----------------------------------------------------------------------------------
+ 162          
+ 163          void AccessCPU0(ECpu1Command Command)
+ 164          {
+ 165   1              unsigned int i=0;
+ 166   1              Packer.Cpu1.PowderLocation = (10 ) /2;
+ 167   1              Packer.Cpu1.Thermometer = 10;           
+ 168   1              Packer.Cpu1.State = Cpu1State_Busy;
+ 169   1              Packer.Cpu1.NowNumber = P4;
+ 170   1              Packer.ErrorCode = ErrorCode_NoError;                                            
+ 171   1              Putchar(UART_Mark) ;
+ 172   1      
+ 173   1              Putchar(Command);
+ 174   1      
+ 175   1              Putchar(Packer.Cpu1.State);
+ 176   1      
+ 177   1              Putchar(Packer.Cpu1.NowNumber);
+ 178   1      
+ 179   1              Putchar(Packer.Cpu1.PowderLocation);
+C51 COMPILER V9.00   F34X_UART0_INTERRUPT                                                  02/25/2013 10:36:58 PAGE 4   
+
+ 180   1      
+ 181   1              Putchar(Packer.Cpu1.Thermometer++);
+ 182   1      
+ 183   1              Putchar(Packer.ErrorCode);
+ 184   1                      
+ 185   1      
+ 186   1              IsRxCommand =0;
+ 187   1              while(!IsRxCommand) 
+ 188   1              {
+ 189   2                      if (i++ >= 12000)       
+ 190   2                      {
+ 191   3                              i=0;
+ 192   3                              Pointer_Packer = &Packer.UART_Mark;
+ 193   3                              Packer.UART_Mark = UART_NoMark ;
+ 194   3                              //Cpu1CommandIdel();
+ 195   3                              return;
+ 196   3                      }
+ 197   2              }
+ 198   1              Pointer_Packer = &Packer.UART_Mark ;
+ 199   1              
+ 200   1      }
+ 201          //-----------------------------------------------------------------------------
+ 202          void UART0_Interrupt (void) interrupt 4
+ 203          {
+ 204   1         if (RI0 == 1)
+ 205   1         {
+ 206   2      
+ 207   2            RI0 = 0;                           // Clear interrupt flag
+ 208   2      
+ 209   2      
+ 210   2         }
+ 211   1      
+ 212   1         if (TI0 == 1)                   // Check if transmit flag is set
+ 213   1         {
+ 214   2            TI0 = 0;                           // Clear interrupt flag
+ 215   2            TX_Ready = 1;                    // Indicate transmission complete
+ 216   2      
+ 217   2         }
+ 218   1      }
+ 219          
+ 220          //-----------------------------------------------------------------------------
+ 221          // End Of File
+ 222          //-----------------------------------------------------------------------------
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    273    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =     79    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     91       2
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =      2    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

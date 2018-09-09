@@ -1,0 +1,208 @@
+C51 COMPILER V9.51   COMMUNICATION                                                         07/01/2015 16:46:38 PAGE 1   
+
+
+C51 COMPILER V9.51, COMPILATION OF MODULE COMMUNICATION
+OBJECT MODULE PLACED IN Communication.OBJ
+COMPILER INVOKED BY: C:\Keil\C51\BIN\c51.exe Communication.h DB OE BR INCDIR(C:\SiLabs\MCU\Inc)
+
+line level    source
+
+   1          typedef unsigned char byte ;
+   2          typedef unsigned int  word ;
+   3          
+   4          typedef union
+   5          {
+   6                  word W ;
+   7                  byte B[2];
+   8          } TWord;
+   9          
+  10          typedef enum
+  11          {
+  12                  Message_Heating                 =0,
+  13                  Message_PowderLocating  =1,
+  14                  Message_PackPowder              =2,
+  15                  Message_PackDrug                =3,
+  16                  Message_PackMix                 =4,
+  17                  Message_PackSpace               =5,
+  18                  Message_Clearing                =6,
+  19                  Message_PackFinish              =7,
+  20                  Message_PackPause               =8,
+  21                  Message_PackCancel              =9,
+  22                  Message_SystemReady             =10,
+  23                  Message_Space                   =11,
+  24          
+  25                  Message_PowderLocationAlerm   =37,
+  26                  Message_PaperEntryAlerm           =38,
+  27                  Message_CarbonEntryAlerm          =39
+  28          } EMessage ;
+  29          
+  30          
+  31          typedef enum
+  32          {
+  33                  ErrorCode_NoError               =0,
+  34                  ErrorCode_ControlPanel  =1,
+  35                  ErrorCode_USBConnection =2,
+  36                  ErrorCode_PaperMotor    =3,
+  37                  ErrorCode_Powder                =4,
+  38                  ErrorCode_Drug                  =5,
+  39                  ErrorCode_PowderCover   =6,
+  40                  ErrorCode_DrugCover             =7,
+  41                  ErrorCode_PresureDown   =8,
+  42                  ErrorCode_PresureUp             =9,
+  43                  ErrorCode_Heater                =10,
+  44                  ErrorCode_HallSensor    =11,
+  45                  ErrorCode_Printer               =12
+  46          } EErrorCode ;
+  47          
+  48          
+  49          typedef enum
+  50          {
+  51                  UART_NoMark     =0x03,
+  52                  UART_Mark       =0x02,
+  53          } EUART ;
+  54          
+  55          //--------------------------------------------------------
+C51 COMPILER V9.51   COMMUNICATION                                                         07/01/2015 16:46:38 PAGE 2   
+
+  56          typedef enum                                    
+  57          {
+  58                  TabletState_Fail        ='A',                           
+  59                  TabletState_Busy        ='B',                                                   
+  60                  TabletState_Sucess      ='C',
+  61          } ETabletState;
+  62          
+  63          
+  64          
+  65          typedef enum 
+  66          { 
+  67              StationState_Idel                   =0,
+  68                  StationState_Heating            =1,     
+  69                  StationState_Packing            =2,     
+  70                  StationState_USBPacking         =3,     
+  71                  StationState_PackPause          =4,     
+  72                  StationState_Clearing           =5,     
+  73                  StationState_PowderLocating =6, 
+  74              StationState_Busy                   =7,     
+  75              StationState_Error                  =8,
+  76                  StationState_Finish                     =9
+  77          } EStationState ;
+  78          
+  79          typedef enum 
+  80          { 
+  81                  State_Error                     =0,
+  82                  State_Packing           =1,     
+  83                  State_Finish            =3
+  84          } E232State ;
+  85          
+  86          // --------------------------------------------------------
+  87          typedef enum                                    
+  88          {
+  89                  TabletCommand_Idel                      ='A',                   
+  90                  TabletCommand_PackStart         ='B',           
+  91                  TabletCommand_PackStop          ='C',                   
+  92                  TabletCommand_Return            ='D',
+  93                  TabletCommand_LEDON                     ='E',
+  94                  TabletCommand_LEDOFF            ='F',
+  95                  TabletCommand_RePack            ='G'            
+  96          } ETabletCommand ;
+  97          
+  98          
+  99          typedef enum 
+ 100          {
+ 101                  EStationCommand_Idel                    ='A',                   
+ 102                  EStationCommand_USBPackStart    ='B',   
+ 103                  EStationCommand_PackPause               ='C',   
+ 104                  EStationCommand_PackStop                ='D',   
+ 105                  EStationCommand_PackContinue    ='E',   
+ 106                  EStationCommand_Return                  ='F'
+ 107          } EStationCommand;
+ 108          
+ 109          typedef enum 
+ 110          {
+ 111                  BoardCommand_Start,
+ 112                  BoardCommand_Idel,                      
+ 113                  BoardCommand_Busy,                      
+ 114                  BoardCommand_RxCasseteInfo,             
+ 115                  BoardCommand_RxCasseteQTY,
+ 116                  BoardCommand_ShowCarbonEntry,
+ 117                  BoardCommand_ShowCarbonNoEntry,
+C51 COMPILER V9.51   COMMUNICATION                                                         07/01/2015 16:46:38 PAGE 3   
+
+ 118                  BoardCommand_ShowPackPause,
+ 119                  BoardCommand_ShowPackContinue,
+ 120                  BoardCommand_ShowPackStop,
+ 121                  BoardCommand_PaperMotorMove,
+ 122                  BoardCommand_PaperMotorStop
+ 123          } E232Command;
+ 124          // --------------------------------------------------------
+ 125          
+ 126          typedef struct 
+ 127          {
+ 128                  ETabletCommand Command;                 
+ 129                  ETabletState     State;                         
+ 130                  byte             PacketA;
+ 131                  byte             PacketB;
+ 132                  unsigned int CasseteNum;                
+ 133                  byte             Quantity;      
+ 134                  byte             BCC;                   
+ 135          } TTablet ;
+ 136          
+ 137          typedef struct
+ 138          {       
+ 139                  EStationCommand Command;
+ 140                  EStationState   State;  
+ 141                  byte    StationNum;     
+ 142                  byte        NumberA     ;
+ 143                  byte            NumberB ;
+ 144                  byte            BCC;
+ 145                  byte            END;
+ 146                  byte        CasseteQTY;         
+ 147          } TStation;
+ 148          
+ 149          typedef struct 
+ 150          {
+ 151                  E232Command     Command;        
+ 152                  E232State       State;  
+ 153                  
+ 154          } T232Board;
+ 155          typedef struct
+ 156          {
+ 157                  byte            HNumber;
+ 158                  byte            TNumber;
+ 159                  byte            SNumber;
+ 160                  byte            QTYTNum;
+ 161                  byte        QTYSNum;
+ 162                  byte            State;
+ 163          } ECasseteNum ;
+ 164          
+ 165          typedef struct
+ 166          {
+ 167                  EUART           UART_Mark;      
+ 168                  EUART           Cast_Mark;
+ 169                  TTablet         Tablet;         
+ 170                  TStation        Station;                
+ 171                  T232Board       Board;          
+ 172                  EErrorCode  ErrorCode;  
+ 173                  ECasseteNum CasseteInfo[5];
+ 174                  byte            StationInfo[5];
+ 175                  byte        RecevieData[30];
+ 176                  byte            CassetRev[30];  
+ 177          } TPacker;
+ 178          
+ 179          
+C51 COMPILER V9.51   COMMUNICATION                                                         07/01/2015 16:46:38 PAGE 4   
+
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   ----    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

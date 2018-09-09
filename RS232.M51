@@ -1,0 +1,214 @@
+BL51 BANKED LINKER/LOCATER V6.22              12/26/2012  13:31:18  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V6.22, INVOKED BY:
+C:\KEIL\C51\BIN\BL51.EXE C:\SiLabs\MCU\Examples\C8051F34x\UART\F34x_UART0_Inte
+>> rrupt.obj TO C:\SiLabs\MCU\Examples\C8051F34x\UART\RS232 RS (256) PL (68) P
+>> W (78)
+
+
+MEMORY MODEL: SMALL
+
+
+INPUT MODULES INCLUDED:
+  C:\SiLabs\MCU\Examples\C8051F34x\UART\F34x_UART0_Interrupt.obj (F34X_UART0_I
+>> NTERRUPT)
+  C:\KEIL\C51\LIB\C51S.LIB (?C_STARTUP)
+  C:\KEIL\C51\LIB\C51S.LIB (?C_INIT)
+
+
+LINK MAP OF MODULE:  C:\SiLabs\MCU\Examples\C8051F34x\UART\RS232 (F34X_UART0_I
+>> NTERRUPT)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            DATA    0008H     0045H     UNIT         ?DT?F34X_UART0_INTERRUPT
+            IDATA   004DH     0001H     UNIT         ?STACK
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+            CODE    0003H     0020H     UNIT         ?PR?UART0_INIT?F34X_UART0
+>> _INTERRUPT
+            CODE    0023H     0003H     ABSOLUTE     
+            CODE    0026H     008CH     UNIT         ?C_C51STARTUP
+            CODE    00B2H     0070H     UNIT         ?PR?UART0_INTERRUPT?F34X_
+>> UART0_INTERRUPT
+            CODE    0122H     0023H     UNIT         ?PR?MAIN?F34X_UART0_INTER
+>> RUPT
+            CODE    0145H     000DH     UNIT         ?C_INITSEG
+            CODE    0152H     000AH     UNIT         ?PR?PORT_INIT?F34X_UART0_
+>> INTERRUPT
+            CODE    015CH     0007H     UNIT         ?PR?SYSCLK_INIT?F34X_UART
+>> 0_INTERRUPT
+
+
+
+OVERLAY MAP OF MODULE:   C:\SiLabs\MCU\Examples\C8051F34x\UART\RS232 (F34X_UAR
+>> T0_INTERRUPT)
+
+
+SEGMENT
+  +--> CALLED SEGMENT
+---------------------
+?C_C51STARTUP
+  +--> ?PR?MAIN?F34X_UART0_INTERRUPT
+  +--> ?C_INITSEG
+
+?PR?MAIN?F34X_UART0_INTERRUPT
+  +--> ?PR?PORT_INIT?F34X_UART0_INTERRUPT
+  +--> ?PR?SYSCLK_INIT?F34X_UART0_INTERRUPT
+  +--> ?PR?UART0_INIT?F34X_UART0_INTERRUPT
+
+
+
+SYMBOL TABLE OF MODULE:  C:\SiLabs\MCU\Examples\C8051F34x\UART\RS232 (F34X_UAR
+>> T0_INTERRUPT)
+BL51 BANKED LINKER/LOCATER V6.22            12/26/2012  13:31:18  PAGE 2
+
+
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+
+  -------         MODULE        F34X_UART0_INTERRUPT
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0008H         PUBLIC        TX_Ready
+  B:00A8H.7       PUBLIC        EA
+  D:00A4H         PUBLIC        P0MDOUT
+  D:0009H         SYMBOL        Byte
+  D:00D9H         PUBLIC        PCA0MD
+  D:00B8H         PUBLIC        IP
+  D:000AH         PUBLIC        UART_Input_First
+  D:00E1H         PUBLIC        XBR0
+  D:00E2H         PUBLIC        XBR1
+  D:000BH         PUBLIC        UART_Output_First
+  C:00B2H         PUBLIC        UART0_Interrupt
+  C:0122H         PUBLIC        main
+  D:0089H         PUBLIC        TMOD
+  C:0152H         PUBLIC        PORT_Init
+  D:00B2H         PUBLIC        OSCICN
+  B:00A8H.4       PUBLIC        ES0
+  B:0098H.0       PUBLIC        RI0
+  B:0098H.1       PUBLIC        TI0
+  D:008DH         PUBLIC        TH1
+  D:008BH         PUBLIC        TL1
+  C:015CH         PUBLIC        SYSCLK_Init
+  B:0088H.6       PUBLIC        TR1
+  D:0099H         PUBLIC        SBUF0
+  D:00EFH         PUBLIC        RSTSRC
+  C:0003H         PUBLIC        UART0_Init
+  D:0098H         PUBLIC        SCON0
+  D:008EH         PUBLIC        CKCON
+  D:000CH         PUBLIC        UART_Buffer_Size
+  D:000DH         PUBLIC        UART_Buffer
+  -------         PROC          MAIN
+  C:0122H         LINE#         76
+  C:0122H         LINE#         77
+  C:0122H         LINE#         79
+  C:0125H         LINE#         81
+  C:0128H         LINE#         82
+  C:012BH         LINE#         83
+  C:012EH         LINE#         85
+  C:0130H         LINE#         87
+  C:0130H         LINE#         88
+  C:0130H         LINE#         91
+  C:013EH         LINE#         92
+  C:013EH         LINE#         93
+  C:0141H         LINE#         94
+  C:0143H         LINE#         95
+  C:0143H         LINE#         96
+  -------         ENDPROC       MAIN
+  -------         PROC          PORT_INIT
+  C:0152H         LINE#         117
+  C:0152H         LINE#         118
+  C:0152H         LINE#         119
+  C:0155H         LINE#         120
+  C:0158H         LINE#         121
+  C:015BH         LINE#         122
+  -------         ENDPROC       PORT_INIT
+  -------         PROC          SYSCLK_INIT
+  C:015CH         LINE#         136
+  C:015CH         LINE#         137
+  C:015CH         LINE#         138
+  C:015FH         LINE#         140
+BL51 BANKED LINKER/LOCATER V6.22            12/26/2012  13:31:18  PAGE 3
+
+
+  C:0162H         LINE#         141
+  -------         ENDPROC       SYSCLK_INIT
+  -------         PROC          UART0_INIT
+  C:0003H         LINE#         153
+  C:0003H         LINE#         154
+  C:0003H         LINE#         155
+  C:0006H         LINE#         160
+  C:0006H         LINE#         161
+  C:0006H         LINE#         162
+  C:0006H         LINE#         163
+  C:0006H         LINE#         164
+  C:0006H         LINE#         165
+  C:0009H         LINE#         166
+  C:000CH         LINE#         167
+  C:000FH         LINE#         168
+  C:000FH         LINE#         169
+  C:000FH         LINE#         170
+  C:000FH         LINE#         171
+  C:000FH         LINE#         172
+  C:000FH         LINE#         173
+  C:000FH         LINE#         174
+  C:000FH         LINE#         175
+  C:000FH         LINE#         177
+  C:0012H         LINE#         178
+  C:0015H         LINE#         179
+  C:0018H         LINE#         180
+  C:001AH         LINE#         181
+  C:001DH         LINE#         182
+  C:0020H         LINE#         183
+  C:0022H         LINE#         185
+  -------         ENDPROC       UART0_INIT
+  -------         PROC          UART0_INTERRUPT
+  C:00B2H         LINE#         200
+  C:00BBH         LINE#         202
+  C:00BEH         LINE#         203
+  C:00BEH         LINE#         204
+  C:00C2H         LINE#         205
+  C:00C4H         LINE#         207
+  C:00C6H         LINE#         209
+  C:00C9H         LINE#         211
+  C:00D0H         LINE#         212
+  C:00D0H         LINE#         213
+  C:00D7H         LINE#         215
+  C:00D9H         LINE#         217
+  C:00DBH         LINE#         218
+  C:00DBH         LINE#         219
+  C:00DBH         LINE#         221
+  C:00DEH         LINE#         222
+  C:00DEH         LINE#         223
+  C:00E0H         LINE#         225
+  C:00E6H         LINE#         226
+  C:00E6H         LINE#         228
+  C:00EBH         LINE#         229
+  C:00EEH         LINE#         232
+  C:00F6H         LINE#         234
+  C:0106H         LINE#         235
+  C:010CH         LINE#         237
+  C:010FH         LINE#         239
+  C:0111H         LINE#         241
+  C:0113H         LINE#         243
+  C:0115H         LINE#         245
+  C:0115H         LINE#         246
+  C:0118H         LINE#         247
+  C:011BH         LINE#         248
+  C:011BH         LINE#         249
+BL51 BANKED LINKER/LOCATER V6.22            12/26/2012  13:31:18  PAGE 4
+
+
+  C:011BH         LINE#         250
+  -------         ENDPROC       UART0_INTERRUPT
+  -------         ENDMOD        F34X_UART0_INTERRUPT
+
+Program Size: data=78.0 xdata=0 code=355
+LINK/LOCATE RUN COMPLETE.  0 WARNING(S),  0 ERROR(S)

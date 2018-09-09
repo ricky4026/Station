@@ -1,0 +1,454 @@
+C51 COMPILER V9.00   COMMUNICATION2                                                        09/11/2014 17:13:22 PAGE 1   
+
+
+C51 COMPILER V9.00, COMPILATION OF MODULE COMMUNICATION2
+OBJECT MODULE PLACED IN Communication2.OBJ
+COMPILER INVOKED BY: C:\Keil\C51\BIN\c51.exe Communication2.h DB OE BR INCDIR(C:\SiLabs\MCU\Inc)
+
+line level    source
+
+   1          typedef unsigned char byte ;
+   2          typedef unsigned int  word ;
+   3          typedef union
+   4          {
+   5                  word W ;
+   6                  byte B[2];
+   7          } TWord;
+   8          
+   9          typedef enum
+  10          {
+  11                  Message_Heating                 =0,
+  12                  Message_PowderLocating  =1,
+  13                  Message_PackPowder              =2,
+  14                  Message_PackDrug                =3,
+  15                  Message_PackMix                 =4,
+  16                  Message_PackSpace               =5,
+  17                  Message_Clearing                =6,
+  18                  Message_PackFinish              =7,
+  19                  Message_PackPause               =8,
+  20                  Message_PackCancel              =9,
+  21                  Message_SystemReady             =10,
+  22                  Message_Space                   =11,
+  23          
+  24                  Message_PowderLocationAlerm   =37,
+  25                  Message_PaperEntryAlerm           =38,
+  26                  Message_CarbonEntryAlerm          =39
+  27          } EMessage ;
+  28          
+  29          
+  30          typedef enum
+  31          {
+  32                  ErrorCode_NoError               =0,
+  33                  ErrorCode_ControlPanel  =1,
+  34                  ErrorCode_USBConnection =2,
+  35                  ErrorCode_PaperMotor    =3,
+  36                  ErrorCode_Powder                =4,
+  37                  ErrorCode_Drug                  =5,
+  38                  ErrorCode_PowderCover   =6,
+  39                  ErrorCode_DrugCover             =7,
+  40                  ErrorCode_PresureDown   =8,
+  41                  ErrorCode_PresureUp             =9,
+  42                  ErrorCode_Heater                =10,
+  43                  ErrorCode_HallSensor    =11,
+  44                  ErrorCode_Printer               =12
+  45          } EErrorCode ;
+  46          
+  47          
+  48          typedef enum
+  49          {
+  50                  UART_NoMark     =0x03,
+  51                  UART_Mark       =0x02,
+  52          } EUART ;
+  53          
+  54          
+  55          
+C51 COMPILER V9.00   COMMUNICATION2                                                        09/11/2014 17:13:22 PAGE 2   
+
+  56          typedef enum
+  57          {
+  58                  KEY_Idel        =0,
+  59                  KEY_Print       =0x09,
+  60                  KEY_Function=0x0B,
+  61                  KEY_Enter       =0x0D,
+  62                  KEY_PgUp        =0x14,
+  63                  KEY_PgDown  =0x15,
+  64                  KEY_Esc         =0x1B,
+  65                  KEY_Right       =0x1C,
+  66                  KEY_Left        =0x1D,
+  67                  KEY_Up          =0x1E,
+  68                  KEY_Down        =0x1F,
+  69                  KEY_Del         =0x20,
+  70                  KEY_Stop        =0x23,
+  71                  KEY_Start       =0x2A,
+  72                  KEY_0           =0x30,
+  73                  KEY_1           =0x31,
+  74                  KEY_2           =0x32,
+  75                  KEY_3           =0x33,
+  76                  KEY_4           =0x34,
+  77                  KEY_5           =0x35,
+  78                  KEY_6           =0x36,
+  79                  KEY_7           =0x37,
+  80                  KEY_8           =0x38,
+  81                  KEY_9           =0x39
+  82          } EKEY ;
+  83          
+  84          
+  85          
+  86          enum
+  87          {
+  88                  u14PC_CarbonStop                = 0x00,
+  89                  u14PC_CarbonStart               = 0x01,
+  90          
+  91                  u14PC_PowderCoverStop   = 0x02,
+  92                  u14PC_PowderCoverStart  = 0x03,
+  93          
+  94                  u14PC_DrugCoverStop     = 0x04,
+  95                  u14PC_DrugCoverStart    = 0x05,
+  96          
+  97                  u14PC_PresureStop               = 0x06,
+  98                  u14PC_PresureStart              = 0x07,
+  99                  u14PC_PowderRight               = 0x08,
+ 100                  u14PC_PowderLeft                = 0x09,
+ 101                  u14PC_PowderStop                = 0x0A,
+ 102                  u14PC_PowderStart               = 0x0B,
+ 103                  u14PC_DrugRight                 = 0x0C,
+ 104                  u14PC_DrugLeft                  = 0x0D,
+ 105                  u14PC_DrugStop                  = 0x0E,
+ 106                  u14PC_DrugStart                 = 0x0F
+ 107          
+ 108          } Eu14PCaa ;
+ 109          
+ 110          enum u15PC
+ 111          {
+ 112                  u15PC_VacuumHighSpeedON         = 0x00,
+ 113                  u15PC_VacuumHighSpeedOFF        = 0x01,
+ 114                  u15PC_VacuumLowSpeedON          = 0x02,
+ 115                  u15PC_VacuumLowSpeedOFF         = 0x03,
+ 116                  u15PC_HeaterControlL            = 0x04,
+ 117                  u15PC_HeaterControlH            = 0x05,
+C51 COMPILER V9.00   COMMUNICATION2                                                        09/11/2014 17:13:22 PAGE 3   
+
+ 118                  u15PC_SharkerOFF                        = 0x06,
+ 119                  u15PC_SharkerON                         = 0x07,
+ 120                  u15PC_PaperCKL                          = 0x08,
+ 121                  u15PC_PaperCKH                          = 0x09,
+ 122                  u15PC_PaperCCW                          = 0x0A,
+ 123                  u15PC_PaperCW                           = 0x0B,
+ 124                  u15PC_PaperResetL                       = 0x0C,
+ 125                  u15PC_PaperResetH                       = 0x0D,
+ 126                  u15PC_PaperDisable                      = 0x0E,
+ 127                  u15PC_PaperEnable                       = 0x0F,
+ 128          
+ 129          } Eu15PCaa ;
+ 130          
+ 131          //--------------------------------------------------------
+ 132          typedef enum 
+ 133          { 
+ 134              USBTxIndex_Mark,                    // 0
+ 135              USBTxIndex_Command,                 // 1 
+ 136                  USBTxIndex_Cpu1State,           // 2
+ 137              USBTxIndex_NowNumber,               // 3
+ 138              USBTxIndex_PowderLocation,  // 4
+ 139              USBTxIndex_Thermometer,             // 5
+ 140                  USBTxIndex_ImageNumber,         // 6
+ 141              USBTxIndex_ErrorCode,               // 7
+ 142              USBTxIndex_Counter,                 // 8
+ 143                  USBTxIndex_Cpu0State            // 9
+ 144          } EUSBTxIndex ;
+ 145          
+ 146          typedef enum 
+ 147          { 
+ 148                  USBRxIndex_Mark                 =0,
+ 149                  USBRxIndex_Cpu1Command  =1,
+ 150                  USBRxIndex_PackType             =2,
+ 151                  USBRxIndex_TotalNumber  =3,
+ 152                  USBRxIndex_SpaceNumber  =4,
+ 153                  USBRxIndex_IsAutoFill   =5,
+ 154                  USBRxIndex_IsShake              =6,
+ 155                  USBRxIndex_HAddr                =7,
+ 156                  USBRxIndex_LAddr                =8,
+ 157                  USBRxIndex_Data                 =9,     // 9~63
+ 158          
+ 159                  USBRxIndex_PackNumber   =15,
+ 160                  USBRxIndex_StartNumber  =16,
+ 161          
+ 162                  USBRxIndex_Year         =17,
+ 163                  USBRxIndex_Month        =18,
+ 164                  USBRxIndex_Day          =19,
+ 165                  USBRxIndex_IsPrintDate          =20,
+ 166                  USBRxIndex_IsPrintNumber        =21
+ 167          
+ 168          } USBRxIndex ;
+ 169          
+ 170          //--------------------------------------------------------
+ 171          typedef enum
+ 172          {
+ 173                  PackType_Powder,
+ 174                  PackType_Drug,
+ 175                  PackType_Mix,
+ 176                  PackType_Space,
+ 177                  PackType_Connection,
+ 178                  PackType_Drug0,
+ 179                  PackType_Drug1,
+C51 COMPILER V9.00   COMMUNICATION2                                                        09/11/2014 17:13:22 PAGE 4   
+
+ 180                  PackType_Drug2,
+ 181                  PackType_Drug3
+ 182          } EPackType;
+ 183          
+ 184          //--------------------------------------------------------
+ 185          typedef enum
+ 186          {
+ 187                  ConnectionMode_0,
+ 188                  ConnectionMode_1,
+ 189                  ConnectionMode_2,
+ 190                  ConnectionMode_3
+ 191          } EConnectionMode;
+ 192          
+ 193          //--------------------------------------------------------
+ 194          typedef enum                                    
+ 195          {
+ 196                  Cpu0State_Idel,                         
+ 197                  Cpu0State_Busy,                                 
+ 198                  Cpu0State_SettingMode,                  
+ 199                  Cpu0State_PackingMode
+ 200          } ECpu0State;
+ 201          
+ 202          
+ 203          
+ 204          typedef enum 
+ 205          { 
+ 206              Cpu1State_Idel                      =0,
+ 207                  Cpu1State_Heating               =1,     
+ 208                  Cpu1State_Packing               =2,     
+ 209                  Cpu1State_USBPacking    =3,     
+ 210                  Cpu1State_PackPause             =4,     
+ 211                  Cpu1State_Clearing              =5,     
+ 212                  Cpu1State_PowderLocating=6, 
+ 213              Cpu1State_Busy                      =7,     
+ 214              Cpu1State_Error                     =8
+ 215          } ECpu1State ;
+ 216          
+ 217          // --------------------------------------------------------
+ 218          typedef enum                                    
+ 219          {
+ 220                  Cpu0Command_Idel,                       
+ 221                  Cpu0Command_TxPackInfo,         
+ 222          
+ 223                  Cpu0Command_ShowInfo,                   
+ 224                  Cpu0Command_ShowPackInfo,               
+ 225                  Cpu0Command_ShowSystemReady,
+ 226                  Cpu0Command_ShowHeating,        
+ 227                  Cpu0Command_ShowClearing,       
+ 228                  Cpu0Command_ShowPowderLocating,
+ 229                  Cpu0Command_ShowPackFinish, 
+ 230                  Cpu0Command_ShowPaperEntry,     
+ 231                  Cpu0Command_ShowPaperReady,     
+ 232                  Cpu0Command_ShowCarbonEntry,
+ 233                  Cpu0Command_ShowCarbonNoEntry,
+ 234                  Cpu0Command_ShowPackPause,      
+ 235                  Cpu0Command_ShowPackContinue,
+ 236                  Cpu0Command_ShowPackStop,       
+ 237                  Cpu0Command_ShowLeftDownGroupBox, 
+ 238          
+ 239                  Cpu0Command_ShowPackPowder,
+ 240                  Cpu0Command_ShowPackDrug,
+ 241                  Cpu0Command_ShowPackMix,
+C51 COMPILER V9.00   COMMUNICATION2                                                        09/11/2014 17:13:22 PAGE 5   
+
+ 242                  Cpu0Command_ShowPackSpace,
+ 243          
+ 244                  Cpu0Command_ShowCPU1ErrorCode,
+ 245                  Cpu0Command_SetDateTime,
+ 246          
+ 247                  Cpu0Command_Reset                       
+ 248          } ECpu0Command ;
+ 249          
+ 250          
+ 251          typedef enum 
+ 252          {
+ 253                  Cpu1Command_Idel,                       
+ 254                  Cpu1Command_RxPackInfo,
+ 255          
+ 256                  Cpu1Command_USBPackStart,
+ 257                  Cpu1Command_PackStart,  
+ 258                  Cpu1Command_PackPause,  
+ 259                  Cpu1Command_PackStop,   
+ 260                  Cpu1Command_PackContinue,       
+ 261                  Cpu1Command_PaperMotorLocate,
+ 262                  Cpu1Command_PaperMotorForward,
+ 263                  Cpu1Command_PaperMotorReverse,
+ 264                  Cpu1Command_AutoClear,          
+ 265                  Cpu1Command_PowderLocate,       
+ 266                  Cpu1Command_StopHeating,        
+ 267                  
+ 268                  Cpu1Command_MemroyWrite,        
+ 269                  Cpu1Command_SetDateTime,
+ 270                  Cpu1Command_Reset,                      
+ 271                  Cpu1Command_Again,
+ 272                  Cpu1Command_Cut
+ 273          
+ 274          } ECpu1Command;
+ 275          
+ 276          typedef enum 
+ 277          {
+ 278                  USBCommand_Idel,                        
+ 279                  USBCommand_Busy,                        
+ 280                  USBCommand_MemroyWrite,         
+ 281                  USBCommand_ShowPaperEntry,
+ 282                  USBCommand_ShowCarbonEntry,
+ 283                  USBCommand_ShowCarbonNoEntry,
+ 284                  USBCommand_ShowPackPause,
+ 285                  USBCommand_ShowPackContinue,
+ 286                  USBCommand_ShowPackStop,
+ 287                  USBCommand_PaperMotorMove,
+ 288                  USBCommand_PaperMotorStop
+ 289          } EUSBCommand;
+ 290          // --------------------------------------------------------
+ 291          typedef enum 
+ 292          {
+ 293                  VacuumType_Stop,
+ 294                  VacuumType_HighSpeed,
+ 295                  VacuumType_LowSpeed
+ 296          } EVacuumType ;
+ 297          
+ 298          typedef enum
+ 299          { 
+ 300                  CommandType_Command, 
+ 301                  CommandType_Memory 
+ 302          } ECommandType ;
+ 303          
+C51 COMPILER V9.00   COMMUNICATION2                                                        09/11/2014 17:13:22 PAGE 6   
+
+ 304          
+ 305          
+ 306          typedef enum
+ 307          {
+ 308                  ErrorUnit_PaperMotor            =20,
+ 309                  ErrorUnit_CarbonMotor           =21,
+ 310                  ErrorUnit_PowderMotor           =22,
+ 311                  ErrorUnit_DrugerMotor           =23,
+ 312                  ErrorUnit_VCoverMotor           =24,
+ 313                  ErrorUnit_DrugerCoverMotor  =25,
+ 314                  ErrorUnit_Printer                       =29,
+ 315                  ErrorUnit_Seal                          =30,
+ 316                  ErrorUnit_I2C                           =31,
+ 317                  ErrorUnit_UART                          =32,
+ 318                  ErrorUnit_USB                           =33,
+ 319                  ErrorUnit_Paramete                      =34,
+ 320          
+ 321                  ErrorUnit_PowderLocation        =37,
+ 322                  ErrorUnit_NoPaper                       =38,
+ 323                  ErrorUnit_NoCarbon                      =39
+ 324          } EErrorUnit ;
+ 325          
+ 326          typedef enum
+ 327          {
+ 328                  ErrorType_MotorAlarm   =12,
+ 329                  ErrorType_PSAlarm          =13,
+ 330                  ErrorType_RSWAlarm         =14,
+ 331                  ErrorType_LSWAlarm         =15,
+ 332                  ErrorType_HallSensor   =16,
+ 333                  ErrorType_Alarm            =17,
+ 334                  ErrorType_Error            =18,
+ 335                  ErrorType_Warning          =19
+ 336          } EErrorType ;
+ 337          
+ 338          
+ 339          typedef struct 
+ 340          {
+ 341                  byte Year;
+ 342                  byte Day;
+ 343                  byte Month;
+ 344                  byte Date;
+ 345                  byte Hour;
+ 346                  byte Minute;
+ 347                  byte Sec;       
+ 348          } TDatetime;
+ 349          
+ 350          typedef struct 
+ 351          {
+ 352                  ECpu0Command Command;                   
+ 353                  ECpu0State       State;                         
+ 354                  EPackType        PackType;                      
+ 355                  byte             SpaceNumber;           
+ 356                  byte             TotalNumber;           
+ 357                  byte             PrintTotalNumber;  
+ 358                  byte             BitPackParameter;      
+ 359                  byte             PrintItem[4];          
+ 360                  byte             PrintItemNumber[4];
+ 361                  byte             ID[8];                         
+ 362                  TDatetime        DateTime ;                     
+ 363          } TCpu0 ;
+ 364          
+ 365          typedef struct
+C51 COMPILER V9.00   COMMUNICATION2                                                        09/11/2014 17:13:22 PAGE 7   
+
+ 366          {
+ 367                  ECpu1Command Command_UART;              
+ 368                  ECpu1Command Command_USB;
+ 369                  ECpu1State              State;  
+ 370                  byte    NowNumber       ;       
+ 371                  byte    PowderLocation; 
+ 372                  byte    Thermometer     ;       
+ 373                  byte    ImageNumber ;   
+ 374          
+ 375                  TWord   PowderStartPosition;
+ 376                  TWord   DrugStartPosition;      
+ 377                  TWord   InitTempTime;           
+ 378                  TWord   ShakeArray[6];          
+ 379          
+ 380                  EVacuumType     VacuumType ;    
+ 381          
+ 382                  TWord   ForwardNumber;          
+ 383                  TWord   ReverseNumber;          
+ 384                  byte    PowderCoverOpenNumber;
+ 385                  byte    DrugCoverOpenNumber;
+ 386                  byte    HeaterPWM ;                     
+ 387                  byte    CarbonPWM ;                     
+ 388          } TCpu1;
+ 389          
+ 390          typedef struct 
+ 391          {
+ 392                  EUSBCommand     Command;                
+ 393                  EPackType       PackType;               
+ 394                  byte            SpaceNumber;    
+ 395                  byte            PackNumber;             
+ 396                  byte            StartNumber;    
+ 397                  byte            TotalNumber;    
+ 398              byte                IsAutoFill;             
+ 399                  byte            IsShake;                
+ 400          
+ 401                  byte            Year;                   
+ 402                  byte            Month;                  
+ 403                  byte            Day;                    
+ 404                  byte        IsPrintDate;        
+ 405                  byte        IsPrintNumber;      
+ 406          } TUSB ;
+ 407          
+ 408          typedef struct
+ 409          {
+ 410                  EUART           UART_Mark;      
+ 411                  TCpu0           Cpu0;           
+ 412                  TCpu1           Cpu1;           
+ 413                  TUSB            USB;            
+ 414                  EErrorCode  ErrorCode;  
+ 415          } TPacker;
+ 416          
+ 417          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   ----    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      2    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+C51 COMPILER V9.00   COMMUNICATION2                                                        09/11/2014 17:13:22 PAGE 8   
+
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
