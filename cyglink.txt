@@ -1,1 +1,1 @@
-"D:\20120412\藥櫃-壓合式\TOPS\TOPStep7\StationB\Station.obj"  TO "D:\20120412\藥櫃-壓合式\TOPS\TOPStep7\StationB\F34x_UART0_Interrupt" RS(256) PL(68) PW(78) 
+"D:\GitHub\Station\Station.obj"  TO "D:\GitHub\Station\F34x_UART0_Interrupt" RS(256) PL(68) PW(78) 

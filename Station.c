@@ -58,7 +58,6 @@ unsigned char CassetCount=0;
 unsigned char address = 0;
 bit IsDrugTimeOut = 0;
 
-unsigned char UART1_Debug[20];
 unsigned char STX = 2;
 unsigned char ETX = 3;
 void UART1_Init (void){
@@ -341,7 +340,7 @@ void RunCommand()
 	}
 
 }
-byte BCCTemp,BCC,Debug_Index =0;
+byte BCCTemp,BCC;
 void UART1_ISR(void)   interrupt 16 //接收BOARD的資料
 {
 	EIE2 &= ~0x02;
@@ -354,9 +353,6 @@ void UART1_ISR(void)   interrupt 16 //接收BOARD的資料
 	{
 		SCON1 &= (~0x01);
 		*(Pointer_Packer) = SBUF1;
-		UART1_Debug[Debug_Index] = SBUF1;
-		if(++Debug_Index >= 20)
-			Debug_Index=0;
 		BCCTemp ^= SBUF1;
 		if(Pointer_Packer == &Packer.UART_Mark)
 		{
